@@ -1,0 +1,7 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+PyMySQL
+Markdown
+Bleach
+Werkzeug
