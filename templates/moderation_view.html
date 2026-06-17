@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+Рассмотрение рецензии
+{% endblock %}
+
+{% block content %}
+
+<h2>Рецензия</h2>
+
+<p>
+    <strong>Книга:</strong>
+    {{ review.book.title }}
+</p>
+
+<p>
+    <strong>Пользователь:</strong>
+
+    {{ review.user.last_name }}
+    {{ review.user.first_name }}
+</p>
+
+<p>
+    <strong>Оценка:</strong>
+    {{ review.rating }}
+</p>
+
+<hr>
+
+<div>
+    {{ review.review_text }}
+</div>
+
+<hr>
+
+<a
+    href="#"
+    class="btn btn-success"
+>
+    Одобрить
+</a>
+
+<a
+    href="#"
+    class="btn btn-danger"
+>
+    Отклонить
+</a>
+
+{% endblock %}
