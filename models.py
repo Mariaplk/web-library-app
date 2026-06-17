@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -9,14 +10,20 @@ book_genres = db.Table(
     db.Column(
         "book_id",
         db.Integer,
-        db.ForeignKey("books.id", ondelete="CASCADE"),
+        db.ForeignKey(
+            "books.id",
+            ondelete="CASCADE"
+        ),
         primary_key=True
     ),
 
     db.Column(
         "genre_id",
         db.Integer,
-        db.ForeignKey("genres.id", ondelete="CASCADE"),
+        db.ForeignKey(
+            "genres.id",
+            ondelete="CASCADE"
+        ),
         primary_key=True
     )
 )
@@ -53,8 +60,8 @@ class User(db.Model):
 
     login = db.Column(
         db.String(100),
-        nullable=False,
-        unique=True
+        unique=True,
+        nullable=False
     )
 
     password_hash = db.Column(
@@ -78,10 +85,13 @@ class User(db.Model):
 
     role_id = db.Column(
         db.Integer,
-        db.ForeignKey("roles.id")
+        db.ForeignKey("roles.id"),
+        nullable=False
     )
 
-    role = db.relationship("Role")
+    role = db.relationship(
+        "Role"
+    )
 
 
 class Genre(db.Model):
@@ -95,6 +105,168 @@ class Genre(db.Model):
 
     name = db.Column(
         db.String(100),
-        nullable=False,
-        unique=True
+        unique=True,
+        nullable=False
+    )
+
+
+class Book(db.Model):
+
+    __tablename__ = "books"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    title = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    description = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    publish_year = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    publisher = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    author = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    pages = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    genres = db.relationship(
+        "Genre",
+        secondary=book_genres,
+        lazy="subquery"
+    )
+
+
+class Cover(db.Model):
+
+    __tablename__ = "covers"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    filename = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    mime_type = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    md5_hash = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    book_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "books.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
+    )
+
+    book = db.relationship(
+        "Book"
+    )
+
+
+class ReviewStatus(db.Model):
+
+    __tablename__ = "review_statuses"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+
+class Review(db.Model):
+
+    __tablename__ = "reviews"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    book_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "books.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "users.id",
+            ondelete="CASCADE"
+        ),
+        nullable=False
+    )
+
+    rating = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    review_text = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    status_id = db.Column(
+        db.Integer,
+        db.ForeignKey(
+            "review_statuses.id"
+        ),
+        nullable=False
+    )
+
+    book = db.relationship(
+        "Book"
+    )
+
+    user = db.relationship(
+        "User"
+    )
+
+    status = db.relationship(
+        "ReviewStatus"
     )
