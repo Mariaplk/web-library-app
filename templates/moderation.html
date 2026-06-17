@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+Модерация рецензий
+{% endblock %}
+
+{% block content %}
+
+<h2>Рецензии на рассмотрении</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Пользователь</th>
+            <th>Дата</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for review in reviews %}
+
+        <tr>
+
+            <td>{{ review.book.title }}</td>
+
+            <td>
+                {{ review.user.last_name }}
+                {{ review.user.first_name }}
+            </td>
+
+            <td>{{ review.created_at }}</td>
+
+            <td>
+
+                <a
+                    href="#"
+                    class="btn btn-primary btn-sm"
+                >
+                    Рассмотреть
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
