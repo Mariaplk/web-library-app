@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+Мои рецензии
+{% endblock %}
+
+{% block content %}
+
+<h2>Мои рецензии</h2>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Оценка</th>
+            <th>Статус</th>
+            <th>Рецензия</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for review in reviews %}
+
+        <tr>
+
+            <td>{{ review.book.title }}</td>
+
+            <td>{{ review.rating }}</td>
+
+            <td>{{ review.status.name }}</td>
+
+            <td>{{ review.review_text }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
