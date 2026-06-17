@@ -1,8 +1,16 @@
 from flask import Flask
 from flask import render_template
+from flask import redirect
+from flask import url_for
+
+from flask_login import LoginManager
+from flask_login import login_user
+from flask_login import logout_user
+from flask_login import current_user
 
 from config import Config
 from models import db
+from models import User
 
 
 app = Flask(__name__)
@@ -10,6 +18,20 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+
+    return User.query.get(
+        int(user_id)
+    )
 
 
 @app.route("/")
@@ -26,6 +48,16 @@ def login():
 
     return render_template(
         "login.html"
+    )
+
+
+@app.route("/logout")
+def logout():
+
+    logout_user()
+
+    return redirect(
+        url_for("index")
     )
 
 
